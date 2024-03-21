@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Gaseste un salon unde sa te programezi:</h1>
+<div class="row">
+        {% for salon in salons %}
+            <div class="col-3">
+                <div class="card" style="width: 18rem; margin-bottom: 15px;">
+                    <img src="media/{{salon.photo}}" class="card-img-top" width="250px" height="250px">
+                    <div class="card-body">
+                        <a href="/salon/{{salon.id}}">
+                            <h5 class="card-title">{{ salon.name }}</h5>
+                        </a>
+                        <p class="card-text">{{ salon.address }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+{% endblock content %}

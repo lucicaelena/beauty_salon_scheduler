@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center">
+     <img src="/media/{{salon.photo}}" class="rounded" width="335px" height="284px">
+     <h1>Salon {{salon.name}} </h1>
+     <p>0 (0 recenzii)</p>
+     <p>{{ salon.address }}</p>
+     <hr>
+     <h3>Alege un serviciu</h3>
+     {% for service in services %}
+     <div class="row">
+          <div class="col">
+               <h5>{{ service.name }}</h5>
+               <h6>{{ service.time }} min, {{ service.price }} RON</h6>
+          </div>
+          <div class="col">
+               <a class="btn btn-primary" href="/salon/{{ salon.id }}/service/{{ service.id }}" role="button">Programeaza</a>
+          </div>
+          <hr>
+     </div>
+
+     {% endfor %}
+</div>
+
+{% endblock content %}
