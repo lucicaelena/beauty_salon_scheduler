@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
+
 class Salon(models.Model):
     name = models.TextField()
     address = models.TextField()
@@ -33,14 +33,16 @@ class Service(models.Model):
 
 
 class Appointment(models.Model):
-    date = models.DateTimeField()
+    date = models.DateField()
+    hour = models.TimeField()
 
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     salon = models.ForeignKey(Salon, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    client = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"[{self.salon}] {self.service.name} - {self.employee.name} - {self.date}"
+        return f"[{self.salon}] {self.service.name} - {self.employee.name} - {self.date} - {self.client.username}"
 
 
 class Review(models.Model):

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Te-ai programat cu succes la {{ salon.name }}</h1>
+<h1>Serviciu ales:</h1>
+<h4>{{ service.name }}</h4>
+<h6>{{ service.time }} min, {{ service.price }} RON</h6>
+<h1>Specialist ales:</h1>
+<img src="/media/{{employee.photo}}" class="rounded-circle" width="55px" height="54px">
+<h5>{{ employee.name }}</h5>
+<h1>Data aleasa:</h1>
+<h5>{{ date }}</h5>
+<h1>Ora aleasa:</h1>
+<h5>{{ hour }}</h5>
+{% endblock %}
+

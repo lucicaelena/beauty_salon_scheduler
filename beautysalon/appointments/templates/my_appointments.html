@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Salon</th>
+            <th scope="col">Employee</th>
+            <th scope="col">Service</th>
+            <th scope="col">Date</th>
+            <th scope="col">Hour</th>
+            <th scope="col">Cancel appointment </th>
+            <th scope="col">Review </th>
+            <!--TODO: Actions column-->
+        </tr>
+    </thead>
+    <tbody>
+        {% for appointment in appointments %}
+            <tr>
+                <td>{{ appointment.salon.name }}</td>
+                <td>{{ appointment.employee.name }}</td>
+                <td>{{ appointment.service.name }}</td>
+                <td>{{ appointment.date }}</td>
+                <td>{{ appointment.hour }}</td>
+                <td>
+                    <form action="/cancel_appointment/{{ appointment.id }}/" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Cancel</button>
+                    </form>
+                </td>
+                <td>
+                    <a href="/review/{{ appointment.id }}/" class="btn btn-primary">Add Review</a>
+                </td>
+                <!--TODO: cancel appointment button // add review button-->
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

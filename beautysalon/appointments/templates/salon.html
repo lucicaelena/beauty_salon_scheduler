@@ -4,7 +4,20 @@
 <div class="text-center">
      <img src="/media/{{salon.photo}}" class="rounded" width="335px" height="284px">
      <h1>Salon {{salon.name}} </h1>
-     <p>0 (0 recenzii)</p>
+     <hr>
+     <h1>Recenzii </h1>
+     <p>{{ reviews|length }} recenzii din {{ reviews|length }}</p>
+     {% for review in reviews %}
+     <div class="card border-primary mb-3">
+          <div class="card-body">
+               <h5>{{ review.client.username }} a scris:</h5>
+               <p>{{ review.description }}</p>
+               <p>Score: {{review.score}} din 5<p>
+
+          </div>
+     </div>
+     <hr>
+     {% endfor %}
      <p>{{ salon.address }}</p>
      <hr>
      <h3>Alege un serviciu</h3>
