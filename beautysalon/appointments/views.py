@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
-from .models import Salon, Service, Employee, Appointment,Review
+from .models import Salon, Service, Employee, Appointment, Review
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from .forms import ReviewForm
+from datetime import datetime
+
 
 def homepage(request):
     salons = Salon.objects.all()
@@ -12,7 +14,6 @@ def homepage(request):
 def salon(request, salon_id):
     salon_info = Salon.objects.get(pk=salon_id)
     services = Service.objects.filter(salon=salon_id).all()
-
 
     return render(request, "salon.html",
                   {'salon': salon_info, 'services': services})
@@ -38,6 +39,7 @@ def select_date(request, salon_id, service_id, employee_id):
 
 def select_hour(request, salon_id, service_id, employee_id, date):
     # All employees work from 10:00 AM to 18:00 PM
+
     time_slots = range(10, 18)
 
     salon_info = Salon.objects.get(pk=salon_id)
@@ -46,11 +48,15 @@ def select_hour(request, salon_id, service_id, employee_id, date):
 
     # TODO: Get all the appointments for this employee this day
     #  and compile a list of available timeslots
-    # appointments = Appointment.objects.filter(salon=salon_id, employee=employee_id
+    appointments = Appointment.objects.filter(salon=salon_id, service_id=service_id, employee=employee_id, date=date)
+    appointments_hours = list(time_slots)
+    available_slots = [slot for slot in appointments_hours if
+                       slot not in [appointment.hour for appointment in appointments]]
+    print(available_slots)
 
     return render(request, "select_hour.html",
                   {'salon': salon_info, 'service': service, 'employee': employee,
-                   'time_slots': time_slots, 'date': date})
+                   'time_slots': available_slots, 'date': date})
 
 
 def add_appointment(request, salon_id, service_id, employee_id, date, hour):
@@ -89,7 +95,8 @@ def logout_page(request):
     logout(request)
     return redirect('homepage')
 
-def cancel_appointment(request,appointment_id):
+
+def cancel_appointment(request, appointment_id):
     appointment = Appointment.objects.get(id=appointment_id)
     if request.method == 'POST':
         appointment.delete()
@@ -112,5 +119,3 @@ def review(request, appointment_id):
         form = ReviewForm()
 
     return render(request, 'review.html', {'form': form, 'appointment': appointment})
-
-
