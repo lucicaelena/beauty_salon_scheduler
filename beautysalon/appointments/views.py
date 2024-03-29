@@ -3,8 +3,7 @@ from .models import Salon, Service, Employee, Appointment, Review
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from .forms import ReviewForm
-from datetime import datetime
-
+from django.urls import reverse
 
 def homepage(request):
     salons = Salon.objects.all()
@@ -14,9 +13,9 @@ def homepage(request):
 def salon(request, salon_id):
     salon_info = Salon.objects.get(pk=salon_id)
     services = Service.objects.filter(salon=salon_id).all()
-
+    reviews = Review.objects.filter(appointment__salon_id=salon_id).order_by('-id')
     return render(request, "salon.html",
-                  {'salon': salon_info, 'services': services})
+                  {'salon': salon_info, 'services': services,'reviews':reviews})
 
 
 def select_employee(request, salon_id, service_id):
@@ -46,17 +45,14 @@ def select_hour(request, salon_id, service_id, employee_id, date):
     service = Service.objects.get(pk=service_id)
     employee = Employee.objects.get(pk=employee_id)
 
-    # TODO: Get all the appointments for this employee this day
-    #  and compile a list of available timeslots
-    appointments = Appointment.objects.filter(salon=salon_id, service_id=service_id, employee=employee_id, date=date)
-    appointments_hours = list(time_slots)
-    available_slots = [slot for slot in appointments_hours if
-                       slot not in [appointment.hour for appointment in appointments]]
-    print(available_slots)
+    existing_appointments = Appointment.objects.filter(employee=employee, date=date).values_list('hour', flat=True)
+    available_time_slots = [time_slot for time_slot in time_slots if
+                            time_slot not in [appointment.hour for appointment in existing_appointments]]
+
 
     return render(request, "select_hour.html",
                   {'salon': salon_info, 'service': service, 'employee': employee,
-                   'time_slots': available_slots, 'date': date})
+                   'time_slots':available_time_slots, 'date': date})
 
 
 def add_appointment(request, salon_id, service_id, employee_id, date, hour):
@@ -114,8 +110,10 @@ def review(request, appointment_id):
             review = form.save(commit=False)
             review.appointment = appointment
             review.client = request.user
-            return redirect('salon', pk=appointment.salon.id)
+            review.save()
+            return redirect(reverse('salon', kwargs={'salon_id': appointment.salon.id}))
     else:
         form = ReviewForm()
 
     return render(request, 'review.html', {'form': form, 'appointment': appointment})
+
