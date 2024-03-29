@@ -2,16 +2,15 @@
 
 {% block content %}
 <div class="container w-50 mx-auto">
-    <form method="POST" class="form-inline" >
+    <form method="POST" class="form-inline">
         {% csrf_token %}
         <div class="form-group">
-            <label for="review_description">Description:</label>
-            <textarea name="review_description" id="review_description" class="form-control" required></textarea>
+            <label for="description">Description:</label>
+            <textarea name="description" id="description" class="form-control" required></textarea>
         </div>
         <div class="form-group">
-            <label for="review_score">Score:</label>
-            <select name="review_score" id="review_score" class="form-control" required>
-                <option value="">Select a score</option>
+            <label for="score">Score:</label>
+            <select name="score" id="score" class="form-control" required>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>

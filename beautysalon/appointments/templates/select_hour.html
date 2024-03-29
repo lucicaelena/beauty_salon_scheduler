@@ -12,8 +12,10 @@
 <h5>{{ date }}</h5>
 <h1>Alege ora:</h1>
 {% for time_slot in time_slots %}
+
  <a href="/salon/{{ salon.id }}/service/{{ service.id }}/employee/{{ employee.id }}/date/{{ date }}/hour/{{ time_slot }}:00">{{ time_slot }}:00</a>
  <hr>
+
 {% endfor %}
 {% endblock %}
 
