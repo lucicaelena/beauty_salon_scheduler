@@ -14,7 +14,6 @@ urlpatterns = [
          views.add_appointment, name='add-appointment'),
     path('appointments', views.my_appointments, name='appointments'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
-    # In Django 5, LogoutView has been deprecated
     path('logout/', views.logout_page, name='logout'),
     path('cancel_appointment/<int:appointment_id>/',views.cancel_appointment,name='cancel_appointment'),
     path('review/<int:appointment_id>/', views.review, name='review')
